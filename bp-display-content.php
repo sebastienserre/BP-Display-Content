@@ -8,30 +8,39 @@ Version: 1.0
 Author: Sébastien SERRE
 Author URI: http://www.thivinfo.com
 License: GPL2
+Text Domain: bp-display-content
 */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-add_action('bp_before_directory_members_page','bpdc_the_content_by_id');
-add_action('bp_before_member_home_content','bpdc_the_content_by_id');
-add_action('bp_before_register_page','bpdc_the_content_by_id');
-add_action('bp_before_activation_page','bpdc_the_content_by_id');
+add_action( 'admin_notices', 'bpdc_check_dependancy' );
 
-function bpdc_the_content_by_id( $post_id=0, $more_link_text = null, $stripteaser = false ){
-	global $post;
-	$page_array=get_option('bp-pages');
-
-	if (bp_is_members_directory()){
-		$post_id = $page_array['members'];
-	} elseif (bp_is_activity_directory()){
-		$post_id = $page_array['activity'];
-	} elseif (bp_is_register_page()){
-		$post_id = $page_array['register'];
-	} elseif (bp_is_activation_page()){
-		$post_id = $page_array['activate'];
+function bpdc_check_dependancy() {
+	if ( ! class_exists( 'BuddyPress' ) ) { ?>
+        <div class="notice notice-error">
+            <p><?php _e( 'BuddyPress is needed to activate BP Display Content', 'bp-display-content' ) ?></p></div>
+		<?php
+		deactivate_plugins( plugin_basename( __FILE__ ) );
 	}
+}
 
-	$post = get_post($post_id);
+
+add_action( 'bp_before_directory_members_page', 'bpdc_the_content_by_id' );
+add_action( 'bp_before_member_home_content', 'bpdc_the_content_by_id' );
+add_action( 'bp_before_register_page', 'bpdc_the_content_by_id' );
+add_action( 'bp_before_activation_page', 'bpdc_the_content_by_id' );
+
+function bpdc_the_content_by_id( $post_id = 0, $more_link_text = null, $stripteaser = false ) {
+	global $post;
+	$result = bp_current_component();
+
+	$page_array = get_option( 'bp-pages' );
+
+	$post_id = $page_array[ $result ];
+
+	$post = get_post( $post_id );
 
 	setup_postdata( $post, $more_link_text, $stripteaser );
 	the_content();
