@@ -15,7 +15,7 @@ By default, BuddyPress is making 4 pages and the content of pages are not displa
 * 4- have fun!
 
 == Frequently Asked Questions ==
-= Are Settings  compikcated? =
+= Are Settings  complicated? =
 *definitively not as there\'s no setting :-) just activate
 
 == Changelog ==
