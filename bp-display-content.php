@@ -3,7 +3,7 @@
 /*
 Plugin Name: BP Display Content
 Description: By default, BuddyPress is making 4 pages and the content of pages are not displayed. BP Display Content  allow BP to display it.
-Version: 1.0.1
+Version: 1.0.2
 Author: Sébastien SERRE
 Author URI: http://www.thivinfo.com
 License: GPL2
@@ -26,6 +26,15 @@ function bpdc_check_dependancy() {
 	}
 }
 
+add_action( 'init', 'bpdc_load_textdomain' );
+/**
+ * Load plugin textdomain.
+ *
+ * @since 1.0.0
+ */
+function bpdc_load_textdomain() {
+	load_plugin_textdomain( 'bp-display-content', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
 
 add_action( 'bp_before_directory_members_page', 'bpdc_the_content_by_id' );
 add_action( 'bp_before_member_home_content', 'bpdc_the_content_by_id' );
